@@ -1,0 +1,11 @@
+[project]
+name = "t212-mcp"
+version = "0.1.0"
+description = "MCP server exposing a Trading212 account to claude.ai as a remote connector"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "httpx>=0.28.1,<1",
+    "mcp>=2.1.1,<3",
+    "python-dotenv>=1.2.3,<2",
+]
