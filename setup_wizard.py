@@ -96,7 +96,7 @@ MCP_PUBLIC_URL=https://{domain}
 MCP_DOMAIN={domain}
 MCP_AUTH_PASSWORD={auth_password}
 
-HOST=0.0.0.0
+HOST=127.0.0.1
 PORT=8000
 """
 

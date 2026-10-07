@@ -82,6 +82,6 @@ if __name__ == "__main__":
     mcp.run(
         transport="streamable-http",
         stateless_http=True,
-        host=os.environ.get("HOST", "0.0.0.0"),
+        host=os.environ.get("HOST", "127.0.0.1"),
         port=int(os.environ.get("PORT", 8000)),
     )

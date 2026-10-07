@@ -90,4 +90,4 @@ In claude.ai: **Settings → Connectors → Add custom connector**, paste `https
 
 ## Local development
 
-`uv run python server.py` runs the same streamable-HTTP + OAuth server locally on `HOST:PORT` (default `0.0.0.0:8000`) — `MCP_PUBLIC_URL` and `MCP_AUTH_PASSWORD` are required env vars even for local runs, since the OAuth provider is wired in unconditionally. Point `MCP_PUBLIC_URL` at `http://127.0.0.1:8000` for local-only testing (no TLS, no Claude connector, just for exercising the tool code and the OAuth flow with curl).
+`uv run python server.py` runs the same streamable-HTTP + OAuth server locally on `HOST:PORT` (default `127.0.0.1:8000`, so only the local reverse proxy can reach it) — `MCP_PUBLIC_URL` and `MCP_AUTH_PASSWORD` are required env vars even for local runs, since the OAuth provider is wired in unconditionally. Point `MCP_PUBLIC_URL` at `http://127.0.0.1:8000` for local-only testing (no TLS, no Claude connector, just for exercising the tool code and the OAuth flow with curl).
