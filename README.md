@@ -88,6 +88,16 @@ curl https://$MCP_DOMAIN/.well-known/oauth-authorization-server
 
 In claude.ai: **Settings → Connectors → Add custom connector**, paste `https://<MCP_DOMAIN>/mcp` as the URL. Claude will open a browser tab to this server's login page — enter `MCP_AUTH_PASSWORD` — and you'll be redirected back, connected.
 
+## 5. Check it end to end
+
+After any deploy (or whenever Claude says the connector isn't working), run on the VPS:
+
+```bash
+sudo deploy/healthcheck.sh
+```
+
+It checks the systemd unit, the localhost-only bind, the OAuth metadata both locally and through the TLS proxy, that unauthenticated `/mcp` gets a 401, and then — reusing the access token Claude obtained, from `oauth_state.json` — runs `initialize`, `tools/list` and one read-only tool call (`get_account_cash`) through the public URL. Pass `--no-t212` to skip that last call. Exits non-zero on any failure, so it can gate a CI deploy. The authenticated checks are skipped until Claude has connected at least once.
+
 ## Local development
 
 `uv run python server.py` runs the same streamable-HTTP + OAuth server locally on `HOST:PORT` (default `127.0.0.1:8000`, so only the local reverse proxy can reach it) — `MCP_PUBLIC_URL` and `MCP_AUTH_PASSWORD` are required env vars even for local runs, since the OAuth provider is wired in unconditionally. Point `MCP_PUBLIC_URL` at `http://127.0.0.1:8000` for local-only testing (no TLS, no Claude connector, just for exercising the tool code and the OAuth flow with curl).
