@@ -1,11 +1,13 @@
 # server.py
 import base64
 import os
+from urllib.parse import urlparse
 
 import httpx
 from dotenv import load_dotenv
 from mcp.server.auth.settings import AuthSettings, ClientRegistrationOptions, RevocationOptions
 from mcp.server.mcpserver import MCPServer
+from mcp.server.transport_security import TransportSecuritySettings
 
 from auth import SingleUserOAuthProvider, register_auth_routes
 from paths import ENV_FILE
@@ -84,4 +86,10 @@ if __name__ == "__main__":
         stateless_http=True,
         host=os.environ.get("HOST", "127.0.0.1"),
         port=int(os.environ.get("PORT", 8000)),
+        # Binding to localhost makes the SDK default to a localhost-only Host
+        # allowlist, which rejects requests proxied in under the public domain.
+        transport_security=TransportSecuritySettings(
+            allowed_hosts=[urlparse(MCP_PUBLIC_URL).netloc, "127.0.0.1:*", "localhost:*", "[::1]:*"],
+            allowed_origins=[MCP_PUBLIC_URL, "http://127.0.0.1:*", "http://localhost:*", "http://[::1]:*"],
+        ),
     )
