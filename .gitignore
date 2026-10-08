@@ -3,3 +3,4 @@
 __pycache__/
 *.pyc
 oauth_state.json
+healthcheck_client.json

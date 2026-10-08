@@ -93,10 +93,10 @@ In claude.ai: **Settings → Connectors → Add custom connector**, paste `https
 After any deploy (or whenever Claude says the connector isn't working), run on the VPS:
 
 ```bash
-sudo deploy/healthcheck.sh
+sudo deploy/healthcheck.py
 ```
 
-It checks the systemd unit, the localhost-only bind, the OAuth metadata both locally and through the TLS proxy, that unauthenticated `/mcp` gets a 401, and then — reusing the access token Claude obtained, from `oauth_state.json` — runs `initialize`, `tools/list` and one read-only tool call (`get_account_cash`) through the public URL. Pass `--no-t212` to skip that last call. Exits non-zero on any failure, so it can gate a CI deploy. The authenticated checks are skipped until Claude has connected at least once.
+It checks the systemd unit, the localhost-only bind, the OAuth metadata both locally and through the TLS proxy, and that unauthenticated `/mcp` gets a 401. It then logs in as its own OAuth client (registered on first run and remembered in `healthcheck_client.json`) through the same `/authorize` → `/login` → `/token` flow Claude uses, runs `initialize`, `tools/list` and one read-only tool call (`get_account_cash`) through the public URL, and revokes its tokens. Claude's own client and tokens are never touched. Pass `--no-t212` to skip the T212 API call. Exits non-zero on any failure, so it can gate a CI deploy. Stdlib-only Python, so it runs under the system `python3` even if the app's venv is broken.
 
 ## Local development
 
